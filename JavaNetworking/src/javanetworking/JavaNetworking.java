@@ -10,40 +10,31 @@ import java.net.*;
 import java.io.*;
 
 public class JavaNetworking extends JFrame implements Runnable {
-    public static final int XBORDER = 20;
-    public static final int YBORDER = 20;
+    public static final int WINDOW_BORDER[] = new int[] { 20, 20 };
     public static final int YTITLE = 25;
-    public static final int WINDOW_WIDTH = 400;
-    public static final int WINDOW_HEIGHT = 400;
-    final public static int NUM_ROWS = 8;
-    final public static int NUM_COLUMNS = 8;
+    public static final int WINDOW_DIMENSIONS[] = new int[] { 400, 400 };
     public static boolean animateFirstTime = true;
-    public static int xsize = -1;
-    public static int ysize = -1;
+    public static int xysize[] = new int[] { -1, -1 };
     public static Image image;
-    public static DevUtils d = new DevUtils()
+
+    public static DevUtils d = new DevUtils();
+    public static GameHandler gh = new GameHandler();
 
     public static Graphics2D g;
 
     final int portNumber = 5657;
 
-    public static boolean gameStarted = false;
-    public static boolean myTurn;
-    public static int serverValue = 0;
-    public static int clientValue = 0;
-
     String host = new String();
-
     public static boolean isConnecting = false;
     public static boolean isClient;
     Thread relaxer;
 
     public static void main(String[] args) {
         JavaNetworking frame = new JavaNetworking();
-        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        frame.setSize(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setTitle("Network");
+        frame.setTitle("Java Game");
         frame.setResizable(false);
     }
 
@@ -85,30 +76,18 @@ public class JavaNetworking extends JFrame implements Runnable {
         addKeyListener(new KeyAdapter() {
 
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_W) {
-                    GameHandler gamehandler = new GameHandler();
-                    d.log(gamehandler.HelloWorld());
-                }
-                // add or modify.
-                if (myTurn && gameStarted && e.getKeyCode() == KeyEvent.VK_1) {
+
+                if (e.getKeyCode() == KeyEvent.VK_1) {
                     if (isClient) {
-                        System.out.println("sending from client");
-                        clientValue++;
-                        ClientHandler.sendPieceMove(clientValue);
+
                     } else {
-                        System.out.println("sending from server");
-                        serverValue++;
-                        ServerHandler.sendPieceMove(serverValue);
+
                     }
-                } else if (myTurn && gameStarted && e.getKeyCode() == KeyEvent.VK_2) {
+                } else if (e.getKeyCode() == KeyEvent.VK_2) {
                     if (isClient) {
-                        System.out.println("sending from client");
-                        clientValue += 2;
-                        ClientHandler.sendPieceMove(clientValue);
+
                     } else {
-                        System.out.println("sending from server");
-                        serverValue += 2;
-                        ServerHandler.sendPieceMove(serverValue);
+
                     }
 
                 } else if (e.getKeyCode() == KeyEvent.VK_S) {
@@ -116,13 +95,11 @@ public class JavaNetworking extends JFrame implements Runnable {
                         try {
 
                             isConnecting = true;
-                            System.out.println("is connecting true");
                             ServerHandler.recieveConnect(portNumber); // 5657
-                            System.out.println("after recieveConnect");
                             if (ServerHandler.connected) {
                                 isClient = false;
-                                myTurn = false;
-                                gameStarted = true;
+                                gh.gameState = GameHandler.GameState.Game;
+
                                 isConnecting = false;
                             }
                         } catch (IOException ex) {
@@ -141,7 +118,6 @@ public class JavaNetworking extends JFrame implements Runnable {
                             ClientHandler.connect(host, portNumber);
                             if (ClientHandler.connected) {
                                 isClient = true;
-                                myTurn = true;
                                 gameStarted = true;
                                 isConnecting = false;
                             }
@@ -155,23 +131,23 @@ public class JavaNetworking extends JFrame implements Runnable {
                     if (!gameStarted) {
                         if (e.getKeyCode() == KeyEvent.VK_0) {
                             host += "0";
-                        } else if (e.getKeyCode() == KeyEvent.VK_1) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
                             host += "1";
-                        } else if (e.getKeyCode() == KeyEvent.VK_2) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_2 || e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
                             host += "2";
-                        } else if (e.getKeyCode() == KeyEvent.VK_3) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_3 || e.getKeyCode() == KeyEvent.VK_NUMPAD3) {
                             host += "3";
-                        } else if (e.getKeyCode() == KeyEvent.VK_4) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_4 || e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
                             host += "4";
-                        } else if (e.getKeyCode() == KeyEvent.VK_5) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_5 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
                             host += "5";
-                        } else if (e.getKeyCode() == KeyEvent.VK_6) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_6 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
                             host += "6";
-                        } else if (e.getKeyCode() == KeyEvent.VK_7) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_7 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
                             host += "7";
-                        } else if (e.getKeyCode() == KeyEvent.VK_8) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_8 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
                             host += "8";
-                        } else if (e.getKeyCode() == KeyEvent.VK_9) {
+                        } else if (e.getKeyCode() == KeyEvent.VK_9 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
                             host += "9";
                         } else if (e.getKeyCode() == KeyEvent.VK_PERIOD) {
                             host += ".";
@@ -208,10 +184,10 @@ public class JavaNetworking extends JFrame implements Runnable {
      * Paints the graphic
      */
     public void paint(Graphics gOld) {
-        if (image == null || xsize != getSize().width || ysize != getSize().height) {
-            xsize = getSize().width;
-            ysize = getSize().height;
-            image = createImage(xsize, ysize);
+        if (image == null || xysize[0] != getSize().width || xysize[1] != getSize().height) {
+            xysize[0] = getSize().width;
+            xysize[1] = getSize().height;
+            image = createImage(xysize[0], xysize[1]);
             g = (Graphics2D) image.getGraphics();
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
@@ -223,48 +199,17 @@ public class JavaNetworking extends JFrame implements Runnable {
 
         int x[] = { getX(0), getX(getWidth2()), getX(getWidth2()), getX(0), getX(0) };
         int y[] = { getY(0), getY(0), getY(getHeight2()), getY(getHeight2()), getY(0) };
-        int ydelta = getHeight2() / NUM_ROWS;
-        int xdelta = getWidth2() / NUM_COLUMNS;
         // put all paint commands under this line
 
         // far outer border
         g.setColor(Color.black);
-        g.fillRect(0, 0, xsize, ysize);
+        g.fillRect(0, 0, xysize[0], xysize[1]);
         // ----------------
 
         // background
 
         g.setColor(Color.white);
         g.fillPolygon(x, y, 4);
-
-        // add or modify.
-        if (!gameStarted) {
-            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-            g.setColor(Color.black);
-            g.drawString("Not Connected", 100, 150);
-
-        } else if (isClient) {
-            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-            g.setColor(Color.black);
-            g.drawString("The Client", 100, 150);
-        } else {
-            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-            g.setColor(Color.black);
-            g.drawString("The Server", 100, 150);
-        }
-
-        {
-            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-            g.setColor(Color.black);
-            g.drawString("Client value " + clientValue, 100, 200);
-        }
-
-        {
-            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-            g.setColor(Color.black);
-            g.drawString("Server value " + serverValue, 100, 300);
-
-        }
 
         try {
             g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
@@ -294,7 +239,7 @@ public class JavaNetworking extends JFrame implements Runnable {
         while (true) {
             animate();
             repaint();
-            double seconds = .1; // time that 1 frame takes.
+            double seconds = 1 / gh.framerate; // time that 1 frame takes.
             int miliseconds = (int) (1000.0 * seconds);
             try {
                 Thread.sleep(miliseconds);
@@ -317,9 +262,9 @@ public class JavaNetworking extends JFrame implements Runnable {
 
         if (animateFirstTime) {
             animateFirstTime = false;
-            if (xsize != getSize().width || ysize != getSize().height) {
-                xsize = getSize().width;
-                ysize = getSize().height;
+            if (xysize[0] != getSize().width || xysize[1] != getSize().height) {
+                xysize[0] = getSize().width;
+                xysize[1] = getSize().height;
             }
 
             reset();
@@ -344,23 +289,23 @@ public class JavaNetworking extends JFrame implements Runnable {
 
     // ///////////////////////////////////////////////////////////////////////
     public static int getX(int x) {
-        return (x + XBORDER);
+        return (x + WINDOW_BORDER[0]);
     }
 
     public static int getY(int y) {
-        return (y + YBORDER + YTITLE);
+        return (y + WINDOW_BORDER[1] + YTITLE);
     }
 
     public static int getYNormal(int y) {
-        return (-y + YBORDER + YTITLE + getHeight2());
+        return (-y + WINDOW_BORDER[1] + YTITLE + getHeight2());
     }
 
     public static int getWidth2() {
-        return (xsize - getX(0) - XBORDER);
+        return (xysize[0] - getX(0) - WINDOW_BORDER[0]);
     }
 
     public static int getHeight2() {
-        return (ysize - getY(0) - YBORDER);
+        return (xysize[1] - getY(0) - WINDOW_BORDER[1]);
     }
 
 }
