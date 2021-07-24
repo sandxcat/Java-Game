@@ -7,7 +7,7 @@ public class GameHandler {
         Menu, Connect, Game, Pause
     }
 
-    private GameState gameState;
+    public GameState gameState;
 
     public GameHandler() {
         gameState = GameState.Menu;
@@ -15,5 +15,5 @@ public class GameHandler {
 
     public String HelloWorld() {
         return "Hello World";
-
+    }  
 }

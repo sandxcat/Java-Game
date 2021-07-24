@@ -9,6 +9,8 @@ import java.net.*;
 import java.io.*;
 
 public class ServerHandler {
+    public static GameHandler gh;
+
     public static boolean connected = false;
     private static ServerSocket MyServer;
     private static Socket clientSocket;
@@ -16,17 +18,11 @@ public class ServerHandler {
     private static PrintWriter pw;
     private static BufferedReader br;
 
-    // private static Socket client = null;
-    // private static PrintWriter serverOut = null;
-    // private static BufferedReader serverIn = null;
+    public ServerHandler(GameHandler _gh) {
+		gh = _gh;
+	}
 
     public static void recieveConnect(int port) throws UnknownHostException, IOException, SocketTimeoutException {
-        // ServerSocket server = new ServerSocket(port);
-        // server.setSoTimeout(8000);
-        // client = server.accept();
-        // serverOut = new PrintWriter(client.getOutputStream(), true);
-        // serverIn = new BufferedReader(new
-        // InputStreamReader(client.getInputStream()));
 
         MyServer = new ServerSocket(port);
         clientSocket = MyServer.accept();
@@ -50,7 +46,7 @@ public class ServerHandler {
         pw = null;
         br = null;
         connected = false;
-        JavaNetworking.gameStarted = false;
+        gh.gameState = GameHandler.GameState.Menu;
         JavaNetworking.reset();
     }
 

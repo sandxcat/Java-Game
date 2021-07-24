@@ -51,7 +51,7 @@ public class ClientHandler {
 		out = null;
 		br = null;
 		connected = false;
-		 = false;
+		gh.gameState = GameHandler.GameState.Menu;
 		JavaNetworking.reset();
 	}
 

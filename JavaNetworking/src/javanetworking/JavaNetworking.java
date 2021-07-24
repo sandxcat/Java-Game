@@ -2,6 +2,9 @@
 package javanetworking;
 
 import javax.swing.*;
+
+import javanetworking.GameHandler.GameState;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -118,7 +121,7 @@ public class JavaNetworking extends JFrame implements Runnable {
                             ClientHandler.connect(host, portNumber);
                             if (ClientHandler.connected) {
                                 isClient = true;
-                                gameStarted = true;
+                                gh.gameState = GameHandler.GameState.Game;
                                 isConnecting = false;
                             }
                         } catch (IOException ex) {
@@ -128,7 +131,7 @@ public class JavaNetworking extends JFrame implements Runnable {
                     }
 
                 } else {
-                    if (!gameStarted) {
+                    if (gh.gameState == GameHandler.GameState.Game) {
                         if (e.getKeyCode() == KeyEvent.VK_0) {
                             host += "0";
                         } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
@@ -157,9 +160,9 @@ public class JavaNetworking extends JFrame implements Runnable {
                     }
                 }
 
-                if (gameStarted || isConnecting) {
+                if (gh.gameState == GameHandler.GameState.Game || isConnecting) {
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !isConnecting) {
-                        if (gameStarted)
+                        
 
                             if (isClient) {
                                 ClientHandler.sendDisconnect();
@@ -168,7 +171,7 @@ public class JavaNetworking extends JFrame implements Runnable {
                                 ServerHandler.sendDisconnect();
                                 ServerHandler.disconnect();
                             }
-                        gameStarted = false;
+                            gh.gameState = GameHandler.GameState.Menu;
                         reset();
                     }
                 }
