@@ -15,11 +15,10 @@ import java.io.*;
 public class JavaNetworking extends JFrame implements Runnable {
     public static final int WINDOW_BORDER[] = new int[] { 0, 0 };
     public static final int YTITLE = 25;
-    public static final int WINDOW_DIMENSIONS[] = new int[] { 800, 800};
+    public static final int WINDOW_DIMENSIONS[] = new int[] { 800, 800 };
     public static boolean animateFirstTime = true;
     public static int xysize[] = new int[] { -1, -1 };
     public static Image image;
-
 
     public static DevUtils d = new DevUtils();
     public static GameHandler gh = new GameHandler();
@@ -132,7 +131,7 @@ public class JavaNetworking extends JFrame implements Runnable {
                     }
 
                 } else {
-                    if (gh.gameState == GameHandler.GameState.Game) {
+                    if (gh.gameState == GameHandler.GameState.Connect) {
                         if (e.getKeyCode() == KeyEvent.VK_0) {
                             host += "0";
                         } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
@@ -163,16 +162,15 @@ public class JavaNetworking extends JFrame implements Runnable {
 
                 if (gh.gameState == GameHandler.GameState.Game || isConnecting) {
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !isConnecting) {
-                        
 
-                            if (isClient) {
-                                ClientHandler.sendDisconnect();
-                                ClientHandler.disconnect();
-                            } else {
-                                ServerHandler.sendDisconnect();
-                                ServerHandler.disconnect();
-                            }
-                            gh.gameState = GameHandler.GameState.Menu;
+                        if (isClient) {
+                            ClientHandler.sendDisconnect();
+                            ClientHandler.disconnect();
+                        } else {
+                            ServerHandler.sendDisconnect();
+                            ServerHandler.disconnect();
+                        }
+                        gh.gameState = GameHandler.GameState.Menu;
                         reset();
                     }
                 }
@@ -209,12 +207,10 @@ public class JavaNetworking extends JFrame implements Runnable {
         g.setColor(Color.black);
         g.fillRect(0, 0, xysize[0], xysize[1]);
         // ----------------
-
-        if(gh.gameState == GameHandler.GameState.Menu){
-            g.drawImage(/*Toolkit.getDefaultToolkit()*/.getImage("assets/menu.jpg"),getX(0),getY(0),getWidth2(),getHeight2(),this);
-            
+        if (gh.gameState == GameHandler.GameState.Menu) {
+            g.drawImage(Toolkit.getDefaultToolkit().getImage("assets/menu.jpg"), getX(0), getY(0), getWidth2(),
+                    getHeight2(), this);
         }
-        
 
         // background
 
@@ -262,7 +258,7 @@ public class JavaNetworking extends JFrame implements Runnable {
      * Resets all variables and restarts game
      */
     public static void reset() {
-        
+
     }
 
     /**
