@@ -13,12 +13,13 @@ import java.net.*;
 import java.io.*;
 
 public class JavaNetworking extends JFrame implements Runnable {
-    public static final int WINDOW_BORDER[] = new int[] { 20, 20 };
+    public static final int WINDOW_BORDER[] = new int[] { 0, 0 };
     public static final int YTITLE = 25;
-    public static final int WINDOW_DIMENSIONS[] = new int[] { 400, 400 };
+    public static final int WINDOW_DIMENSIONS[] = new int[] { 800, 800};
     public static boolean animateFirstTime = true;
     public static int xysize[] = new int[] { -1, -1 };
     public static Image image;
+
 
     public static DevUtils d = new DevUtils();
     public static GameHandler gh = new GameHandler();
@@ -44,7 +45,7 @@ public class JavaNetworking extends JFrame implements Runnable {
     public JavaNetworking() {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                if (e.BUTTON1 == e.getButton()) {
+                if (MouseEvent.BUTTON1 == e.getButton()) {
 
                 }
 
@@ -56,7 +57,7 @@ public class JavaNetworking extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.BUTTON1 == e.getButton()) {
+                if (MouseEvent.BUTTON1 == e.getButton()) {
 
                 }
 
@@ -209,6 +210,12 @@ public class JavaNetworking extends JFrame implements Runnable {
         g.fillRect(0, 0, xysize[0], xysize[1]);
         // ----------------
 
+        if(gh.gameState == GameHandler.GameState.Menu){
+            g.drawImage(/*Toolkit.getDefaultToolkit()*/.getImage("assets/menu.jpg"),getX(0),getY(0),getWidth2(),getHeight2(),this);
+            
+        }
+        
+
         // background
 
         g.setColor(Color.white);
@@ -242,7 +249,7 @@ public class JavaNetworking extends JFrame implements Runnable {
         while (true) {
             animate();
             repaint();
-            double seconds = 1 / gh.framerate; // time that 1 frame takes.
+            double seconds = 1 / GameHandler.framerate; // time that 1 frame takes.
             int miliseconds = (int) (1000.0 * seconds);
             try {
                 Thread.sleep(miliseconds);
@@ -255,7 +262,7 @@ public class JavaNetworking extends JFrame implements Runnable {
      * Resets all variables and restarts game
      */
     public static void reset() {
-
+        
     }
 
     /**
