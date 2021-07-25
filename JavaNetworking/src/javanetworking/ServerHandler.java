@@ -6,9 +6,12 @@ package javanetworking;
 
 import java.awt.*;
 import java.net.*;
+
+import javanetworking.GameHandler.GameState;
+
 import java.io.*;
 
-public class ServerHandler implements Runnable {
+public class ServerHandler {
     public static GameHandler gh;
 
     public static boolean connected = false;
@@ -18,23 +21,34 @@ public class ServerHandler implements Runnable {
     private static PrintWriter pw;
     private static BufferedReader br;
 
-    @Override
-    public void run() {
-
-    }
-
     public ServerHandler(GameHandler _gh) {
         gh = _gh;
     }
 
     public static void recieveConnect(int port) throws UnknownHostException, IOException, SocketTimeoutException {
         MyServer = new ServerSocket(port);
-        clientSocket = MyServer.accept();
-        os = clientSocket.getOutputStream();
-        pw = new PrintWriter(os, true);
-        br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        connected = true;
-        recievePieceMove();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    clientSocket = MyServer.accept();
+                    du.log("In thread running on ServerHandler");
+                    os = clientSocket.getOutputStream();
+                    pw = new PrintWriter(os, true);
+                    br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    connected = true;
+                    recievePieceMove();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        du.log(connected + "");
+
+    }
+
+    public static void setConnected() {
+
     }
 
     public static void disconnect() {

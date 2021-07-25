@@ -19,11 +19,22 @@ public class ConnectionHandler {
                 try {
                     isConnecting = true;
                     ServerHandler.recieveConnect(portNumber); // 5657
-                    if (ServerHandler.connected) {
-                        isClient = false;
-                        gh.gameState = GameHandler.GameState.Game;
-                        isConnecting = false;
-                    }
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (gh.gameState != GameHandler.GameState.Game) {
+                                du.log("RAN CONNECTIONHANDLER THREAD");
+                                if (ServerHandler.connected) {
+                                    du.log("RAN CONNECTIONHANDLER THREAD IN IF STATEMENT");
+                                    isClient = false;
+                                    gh.gameState = GameHandler.GameState.Game;
+                                    isConnecting = false;
+                                }
+                            }
+                        }
+                    }).start();
+
                 } catch (IOException ex) {
                     System.out.println("Cannot host server: " + ex.getMessage());
                     isConnecting = false;

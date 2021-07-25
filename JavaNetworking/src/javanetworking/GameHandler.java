@@ -15,5 +15,5 @@ public class GameHandler {
 
     public String HelloWorld() {
         return "Hello World";
-    }  
+    }
 }
