@@ -32,11 +32,11 @@ public class ServerHandler {
                     pw = new PrintWriter(os, true);
                     br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                    connected = true;
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+                connected = true;
                 recievePieceMove();
             }
         }).start();

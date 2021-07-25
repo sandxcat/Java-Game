@@ -27,14 +27,24 @@ public class ClientHandler {
 	}
 
 	public static void connect(String ip, int port) throws UnknownHostException, IOException {
-		hostIP = ip;
-		hostPort = port;
-		MyClient = new Socket(ip, port);
-		br = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
-		out = new PrintWriter(MyClient.getOutputStream(), true);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				hostIP = ip;
+				hostPort = port;
+				try {
+					MyClient = new Socket(ip, port);
+					br = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
+					out = new PrintWriter(MyClient.getOutputStream(), true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-		connected = true;
-		recievePieceMove();
+				connected = true;
+				recievePieceMove();
+			}
+		}).start();
 	}
 
 	public static void disconnect() {
