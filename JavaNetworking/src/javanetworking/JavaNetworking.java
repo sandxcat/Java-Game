@@ -1,6 +1,7 @@
 
 package javanetworking;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import javanetworking.GameHandler.GameState;
@@ -11,6 +12,7 @@ import java.awt.image.BufferedImage;
 
 import java.net.*;
 import java.io.*;
+import java.awt.image.*;
 
 public class JavaNetworking extends JFrame implements Runnable {
     public static final int WINDOW_BORDER[] = new int[] { 0, 0 };
@@ -18,7 +20,7 @@ public class JavaNetworking extends JFrame implements Runnable {
     public static final int WINDOW_DIMENSIONS[] = new int[] { 800, 800 };
     public static boolean animateFirstTime = true;
     public static int xysize[] = new int[] { -1, -1 };
-    public static Image image;
+    public static Image image = null;
 
     public static DevUtils d = new DevUtils();
     public static GameHandler gh = new GameHandler();
@@ -45,6 +47,12 @@ public class JavaNetworking extends JFrame implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (MouseEvent.BUTTON1 == e.getButton()) {
+                    int mousePos[] = new int[] { e.getX(), e.getY() };
+                    d.log("MX " + mousePos[0] + "        " + "MY " + mousePos[1]);
+
+                    if (mousePos[0] >= 225 && mousePos[0] <= 575 && mousePos[1] >= 275 && mousePos[1] <= 325) {
+                        gh.gameState = GameState.Connect;
+                    }
 
                 }
 
@@ -186,6 +194,7 @@ public class JavaNetworking extends JFrame implements Runnable {
      * Paints the graphic
      */
     public void paint(Graphics gOld) {
+
         if (image == null || xysize[0] != getSize().width || xysize[1] != getSize().height) {
             xysize[0] = getSize().width;
             xysize[1] = getSize().height;
@@ -206,26 +215,31 @@ public class JavaNetworking extends JFrame implements Runnable {
         // far outer border
         g.setColor(Color.black);
         g.fillRect(0, 0, xysize[0], xysize[1]);
-        // ----------------
-        if (gh.gameState == GameHandler.GameState.Menu) {
-            g.drawImage(Toolkit.getDefaultToolkit().getImage("assets/menu.jpg"), getX(0), getY(0), getWidth2(),
-                    getHeight2(), this);
-        }
 
         // background
-
         g.setColor(Color.white);
         g.fillPolygon(x, y, 4);
+        // ----------------
 
-        try {
-            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-            g.setColor(Color.black);
-            g.drawString("Your IP address: " + InetAddress.getLocalHost().getHostAddress(), getX(10), getY(20));
-            g.drawString("Enter IP address: " + host, getX(10), getY(60));
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        if (gh.gameState == GameHandler.GameState.Menu) {
+            g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/menu.jpg"), getX(0), getY(0),
+                    getWidth2(), getHeight2(), this);
+        }
+        else if(){
+            g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/connect.jpg"), getX(0), getY(0),
+                    getWidth2(), getHeight2(), this);
         }
 
+        if (gh.gameState == GameHandler.GameState.Connect) {
+            try {
+                g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
+                g.setColor(Color.black);
+                g.drawString("Your IP address: " + InetAddress.getLocalHost().getHostAddress(), getX(10), getY(20));
+                g.drawString("Enter IP address: " + host, getX(10), getY(60));
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        }
         // put all paint commands above this line
         gOld.drawImage(image, 0, 0, null);
     }
