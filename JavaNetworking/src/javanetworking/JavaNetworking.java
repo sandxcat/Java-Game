@@ -4,7 +4,7 @@ package javanetworking;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import javanetworking.GameHandler.GameState;
+import javanetworking.UIComponents.UIHandler;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,9 +22,8 @@ public class JavaNetworking extends JFrame implements Runnable {
     public static int xysize[] = new int[] { -1, -1 };
     public static Image image = null;
 
-    public static DevUtils d = new DevUtils();
     public static GameHandler gh = new GameHandler();
-
+    public static UIHandler ui = new UIHandler(gh);
     public static Graphics2D g;
 
     final int portNumber = 5657;
@@ -48,11 +47,9 @@ public class JavaNetworking extends JFrame implements Runnable {
             public void mousePressed(MouseEvent e) {
                 if (MouseEvent.BUTTON1 == e.getButton()) {
                     int mousePos[] = new int[] { e.getX(), e.getY() };
-                    d.log("MX " + mousePos[0] + "        " + "MY " + mousePos[1]);
+                    du.log("MX " + mousePos[0] + "        " + "MY " + mousePos[1]);
 
-                    if (mousePos[0] >= 225 && mousePos[0] <= 575 && mousePos[1] >= 275 && mousePos[1] <= 325) {
-                        gh.gameState = GameState.Connect;
-                    }
+                    ui.isButton(mousePos);
 
                 }
 
@@ -224,8 +221,7 @@ public class JavaNetworking extends JFrame implements Runnable {
         if (gh.gameState == GameHandler.GameState.Menu) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/menu.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
-        }
-        else if(){
+        } else if (gh.gameState == GameHandler.GameState.Connect) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/connect.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
         }
