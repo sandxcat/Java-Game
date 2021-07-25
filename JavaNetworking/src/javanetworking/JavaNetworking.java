@@ -17,7 +17,7 @@ import java.awt.image.*;
 
 public class JavaNetworking extends JFrame implements Runnable {
     public static final int WINDOW_BORDER[] = new int[] { 0, 0 };
-    public static final int YTITLE = 25;
+    public static final int YTITLE = 0;
     public static final int WINDOW_DIMENSIONS[] = new int[] { 1920, 1080 };
     public static boolean animateFirstTime = true;
     public static int xysize[] = new int[] { -1, -1 };
@@ -32,6 +32,8 @@ public class JavaNetworking extends JFrame implements Runnable {
 
     public static void main(String[] args) {
         JavaNetworking frame = new JavaNetworking();
+        frame.setUndecorated(true);
+        frame.setLayout(null);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setSize(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,7 +82,7 @@ public class JavaNetworking extends JFrame implements Runnable {
 
             public void keyPressed(KeyEvent e) {
 
-                if (gh.gameState == GameHandler.GameState.Connect && ui.host.length() < 15) {
+                if (gh.gameState == GameHandler.GameState.Connect && (ui.host.length() < 15 || e.getKeyCode() == 8)) {
                     if (e.getKeyCode() == KeyEvent.VK_0 || e.getKeyCode() == KeyEvent.VK_NUMPAD0) {
                         ui.host += "0";
                     } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
@@ -167,7 +169,7 @@ public class JavaNetworking extends JFrame implements Runnable {
             g.setColor(Color.black);
 
             Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(ui.host, g);
-            int[] drawPos = UIHandler.centerText(new int[] { 400, 300 },
+            int[] drawPos = UIHandler.centerText(new int[] { 960, 355 },
                     new int[] { (int) stringBounds.getWidth(), (int) stringBounds.getHeight() });
             g.drawString(ui.host, getX(drawPos[du.x]), getY(drawPos[du.y]));
 

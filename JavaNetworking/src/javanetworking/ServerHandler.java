@@ -19,19 +19,27 @@ public class ServerHandler {
     private static BufferedReader br;
 
     public ServerHandler(GameHandler _gh) {
-		gh = _gh;
-	}
+        gh = _gh;
+    }
 
     public static void recieveConnect(int port) throws UnknownHostException, IOException, SocketTimeoutException {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    MyServer = new ServerSocket(port);
+                    clientSocket = MyServer.accept();
+                    os = clientSocket.getOutputStream();
+                    pw = new PrintWriter(os, true);
+                    br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        MyServer = new ServerSocket(port);
-        clientSocket = MyServer.accept();
-        os = clientSocket.getOutputStream();
-        pw = new PrintWriter(os, true);
-        br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        connected = true;
-        recievePieceMove();
+                    connected = true;
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                recievePieceMove();
+            }
+        }).start();
     }
 
     public static void disconnect() {

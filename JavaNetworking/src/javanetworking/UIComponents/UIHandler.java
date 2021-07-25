@@ -30,9 +30,11 @@ public class UIHandler {
         Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Connect);
         Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 677, 560, GameHandler.GameState.Connect);
         Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 677, 810, GameHandler.GameState.Connect);
+        Button menuBtn = new Button("menuBtn", Button.BtnType.Small, 887, 992, GameHandler.GameState.Connect);
         buttons.add(ipTextBtn);
         buttons.add(hostBtn);
         buttons.add(connectBtn);
+        buttons.add(menuBtn);
     }
 
     public void isButton(int[] mPos) {
@@ -67,6 +69,9 @@ public class UIHandler {
                     break;
                 case "connectBtn":
                     connectH.connect("Connect", host);
+                    break;
+                case "menuBtn":
+                    gh.gameState = GameHandler.GameState.Menu;
                     break;
             }
 
