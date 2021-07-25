@@ -16,14 +16,14 @@ public class Button {
     public GameState uiState;
 
     static private int[] mainBtn() {
-        int xsize = 350;
-        int ysize = 50;
+        int xsize = 565;
+        int ysize = 80;
         return new int[] { xsize, ysize };
     }
 
     static private int[] smallBtn() {
-        int xsize = 90;
-        int ysize = 50;
+        int xsize = 145;
+        int ysize = 75;
         return new int[] { xsize, ysize };
     }
 

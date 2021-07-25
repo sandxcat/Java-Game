@@ -18,7 +18,7 @@ import java.awt.image.*;
 public class JavaNetworking extends JFrame implements Runnable {
     public static final int WINDOW_BORDER[] = new int[] { 0, 0 };
     public static final int YTITLE = 25;
-    public static final int WINDOW_DIMENSIONS[] = new int[] { 800, 800 };
+    public static final int WINDOW_DIMENSIONS[] = new int[] { 1920, 1080 };
     public static boolean animateFirstTime = true;
     public static int xysize[] = new int[] { -1, -1 };
     public static Image image = null;
@@ -32,11 +32,12 @@ public class JavaNetworking extends JFrame implements Runnable {
 
     public static void main(String[] args) {
         JavaNetworking frame = new JavaNetworking();
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setSize(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setTitle("Java Game");
-        frame.setResizable(false);
+        frame.setResizable(true);
     }
 
     public JavaNetworking() {

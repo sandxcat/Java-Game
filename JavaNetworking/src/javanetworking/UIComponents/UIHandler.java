@@ -20,16 +20,16 @@ public class UIHandler {
 
     private void generateBtns() {
         // Menu buttons
-        Button startBtn = new Button("startBtn", Button.BtnType.Main, 225, 280, GameHandler.GameState.Menu);
-        Button optionsBtn = new Button("optionsBtn", Button.BtnType.Main, 225, 390, GameHandler.GameState.Menu);
-        Button exitBtn = new Button("exitBtn", Button.BtnType.Main, 225, 500, GameHandler.GameState.Menu);
+        Button startBtn = new Button("startBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Menu);
+        Button optionsBtn = new Button("optionsBtn", Button.BtnType.Main, 677, 500, GameHandler.GameState.Menu);
+        Button exitBtn = new Button("exitBtn", Button.BtnType.Main, 677, 685, GameHandler.GameState.Menu);
         buttons.add(startBtn);
         buttons.add(optionsBtn);
         buttons.add(exitBtn);
         // Connect buttons
-        Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 225, 280, GameHandler.GameState.Connect);
-        Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 225, 443, GameHandler.GameState.Connect);
-        Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 225, 610, GameHandler.GameState.Connect);
+        Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Connect);
+        Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 677, 560, GameHandler.GameState.Connect);
+        Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 677, 810, GameHandler.GameState.Connect);
         buttons.add(ipTextBtn);
         buttons.add(hostBtn);
         buttons.add(connectBtn);
