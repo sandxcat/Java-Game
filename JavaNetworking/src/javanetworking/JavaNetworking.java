@@ -8,6 +8,7 @@ import javanetworking.UIComponents.UIHandler;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import java.net.*;
@@ -23,14 +24,10 @@ public class JavaNetworking extends JFrame implements Runnable {
     public static Image image = null;
 
     public static GameHandler gh = new GameHandler();
-    public static UIHandler ui = new UIHandler(gh);
+    public static ConnectionHandler connectH = new ConnectionHandler(gh);
+    public static UIHandler ui = new UIHandler(gh, connectH);
     public static Graphics2D g;
 
-    final int portNumber = 5657;
-
-    String host = new String();
-    public static boolean isConnecting = false;
-    public static boolean isClient;
     Thread relaxer;
 
     public static void main(String[] args) {
@@ -47,10 +44,7 @@ public class JavaNetworking extends JFrame implements Runnable {
             public void mousePressed(MouseEvent e) {
                 if (MouseEvent.BUTTON1 == e.getButton()) {
                     int mousePos[] = new int[] { e.getX(), e.getY() };
-                    du.log("MX " + mousePos[0] + "        " + "MY " + mousePos[1]);
-
                     ui.isButton(mousePos);
-
                 }
 
                 repaint();
@@ -85,90 +79,38 @@ public class JavaNetworking extends JFrame implements Runnable {
 
             public void keyPressed(KeyEvent e) {
 
-                if (e.getKeyCode() == KeyEvent.VK_1) {
-                    if (isClient) {
-
-                    } else {
-
-                    }
-                } else if (e.getKeyCode() == KeyEvent.VK_2) {
-                    if (isClient) {
-
-                    } else {
-
-                    }
-
-                } else if (e.getKeyCode() == KeyEvent.VK_S) {
-                    if (!isConnecting) {
-                        try {
-
-                            isConnecting = true;
-                            ServerHandler.recieveConnect(portNumber); // 5657
-                            if (ServerHandler.connected) {
-                                isClient = false;
-                                gh.gameState = GameHandler.GameState.Game;
-
-                                isConnecting = false;
-                            }
-                        } catch (IOException ex) {
-                            System.out.println("Cannot host server: " + ex.getMessage());
-                            isConnecting = false;
-                        }
-
-                    }
-
-                } else if (e.getKeyCode() == KeyEvent.VK_C) {
-                    if (!isConnecting) {
-
-                        try {
-
-                            isConnecting = true;
-                            ClientHandler.connect(host, portNumber);
-                            if (ClientHandler.connected) {
-                                isClient = true;
-                                gh.gameState = GameHandler.GameState.Game;
-                                isConnecting = false;
-                            }
-                        } catch (IOException ex) {
-                            System.out.println("Cannot join server: " + ex.getMessage());
-                            isConnecting = false;
-                        }
-                    }
-
-                } else {
-                    if (gh.gameState == GameHandler.GameState.Connect) {
-                        if (e.getKeyCode() == KeyEvent.VK_0) {
-                            host += "0";
-                        } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                            host += "1";
-                        } else if (e.getKeyCode() == KeyEvent.VK_2 || e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
-                            host += "2";
-                        } else if (e.getKeyCode() == KeyEvent.VK_3 || e.getKeyCode() == KeyEvent.VK_NUMPAD3) {
-                            host += "3";
-                        } else if (e.getKeyCode() == KeyEvent.VK_4 || e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
-                            host += "4";
-                        } else if (e.getKeyCode() == KeyEvent.VK_5 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                            host += "5";
-                        } else if (e.getKeyCode() == KeyEvent.VK_6 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                            host += "6";
-                        } else if (e.getKeyCode() == KeyEvent.VK_7 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                            host += "7";
-                        } else if (e.getKeyCode() == KeyEvent.VK_8 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                            host += "8";
-                        } else if (e.getKeyCode() == KeyEvent.VK_9 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                            host += "9";
-                        } else if (e.getKeyCode() == KeyEvent.VK_PERIOD) {
-                            host += ".";
-                        } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                            host = host.substring(0, host.length() - 1);
-                        }
+                if (gh.gameState == GameHandler.GameState.Connect && ui.host.length() < 15) {
+                    if (e.getKeyCode() == KeyEvent.VK_0 || e.getKeyCode() == KeyEvent.VK_NUMPAD0) {
+                        ui.host += "0";
+                    } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
+                        ui.host += "1";
+                    } else if (e.getKeyCode() == KeyEvent.VK_2 || e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
+                        ui.host += "2";
+                    } else if (e.getKeyCode() == KeyEvent.VK_3 || e.getKeyCode() == KeyEvent.VK_NUMPAD3) {
+                        ui.host += "3";
+                    } else if (e.getKeyCode() == KeyEvent.VK_4 || e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
+                        ui.host += "4";
+                    } else if (e.getKeyCode() == KeyEvent.VK_5 || e.getKeyCode() == KeyEvent.VK_NUMPAD5) {
+                        ui.host += "5";
+                    } else if (e.getKeyCode() == KeyEvent.VK_6 || e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
+                        ui.host += "6";
+                    } else if (e.getKeyCode() == KeyEvent.VK_7 || e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
+                        ui.host += "7";
+                    } else if (e.getKeyCode() == KeyEvent.VK_8 || e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
+                        ui.host += "8";
+                    } else if (e.getKeyCode() == KeyEvent.VK_9 || e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
+                        ui.host += "9";
+                    } else if (e.getKeyCode() == KeyEvent.VK_PERIOD) {
+                        ui.host += ".";
+                    } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && ui.host.length() > 0) {
+                        ui.host = ui.host.substring(0, ui.host.length() - 1);
                     }
                 }
 
-                if (gh.gameState == GameHandler.GameState.Game || isConnecting) {
-                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !isConnecting) {
+                if (gh.gameState == GameHandler.GameState.Game || connectH.isConnecting) {
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !connectH.isConnecting) {
 
-                        if (isClient) {
+                        if (connectH.isClient) {
                             ClientHandler.sendDisconnect();
                             ClientHandler.disconnect();
                         } else {
@@ -213,31 +155,26 @@ public class JavaNetworking extends JFrame implements Runnable {
         g.setColor(Color.black);
         g.fillRect(0, 0, xysize[0], xysize[1]);
 
-        // background
-        g.setColor(Color.white);
-        g.fillPolygon(x, y, 4);
-        // ----------------
-
         if (gh.gameState == GameHandler.GameState.Menu) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/menu.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
         } else if (gh.gameState == GameHandler.GameState.Connect) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/connect.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
+
+            g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
+            g.setColor(Color.black);
+
+            Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(ui.host, g);
+            int[] drawPos = UIHandler.centerText(new int[] { 400, 300 },
+                    new int[] { (int) stringBounds.getWidth(), (int) stringBounds.getHeight() });
+            g.drawString(ui.host, getX(drawPos[du.x]), getY(drawPos[du.y]));
+
         }
 
-        if (gh.gameState == GameHandler.GameState.Connect) {
-            try {
-                g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
-                g.setColor(Color.black);
-                g.drawString("Your IP address: " + InetAddress.getLocalHost().getHostAddress(), getX(10), getY(20));
-                g.drawString("Enter IP address: " + host, getX(10), getY(60));
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-        }
         // put all paint commands above this line
         gOld.drawImage(image, 0, 0, null);
+
     }
 
     // //////////////////////////////////////////////////////////////////////////

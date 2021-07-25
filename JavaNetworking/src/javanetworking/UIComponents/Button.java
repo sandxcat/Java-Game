@@ -1,10 +1,9 @@
 package javanetworking.UIComponents;
 
 import javanetworking.GameHandler.GameState;
+import javanetworking.du;
 
 public class Button {
-    private final static int x = 0;
-    private final static int y = 1;
 
     static public enum BtnType {
         Main, Small
@@ -23,8 +22,8 @@ public class Button {
     }
 
     static private int[] smallBtn() {
-        int xsize = 0;
-        int ysize = 0;
+        int xsize = 90;
+        int ysize = 50;
         return new int[] { xsize, ysize };
     }
 
@@ -42,8 +41,8 @@ public class Button {
     }
 
     Boolean buttonHitbox(int[] mousePos) {
-        if (mousePos[x] >= position[x] && mousePos[x] <= (position[x] + size[x]) && mousePos[y] >= position[y]
-                && mousePos[y] <= (position[y] + size[y])) {
+        if (mousePos[du.x] >= position[du.x] && mousePos[du.x] <= (position[du.x] + size[du.x])
+                && mousePos[du.y] >= position[du.y] && mousePos[du.y] <= (position[du.y] + size[du.y])) {
             return true;
         }
         return false;
