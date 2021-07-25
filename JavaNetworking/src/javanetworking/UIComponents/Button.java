@@ -8,7 +8,7 @@ public class Button {
     static public enum BtnType {
         Main, Small
     }
-
+    private static String focusBtn = "";
     public String buttonName;
     public BtnType buttonType;
     public int[] position = new int[2];
@@ -24,8 +24,13 @@ public class Button {
     static private int[] smallBtn() {
         int xsize = 145;
         int ysize = 75;
-        return new int[] { xsize, ysize };
+        return new 
+        int[] { xsize, ysize };
     }
+
+    static public void setFocus(String s){
+        focusBtn = s;
+    } 
 
     Button(String _buttonName, BtnType _buttonType, int xPos, int yPos, GameState _uiState) {
         buttonName = _buttonName;
@@ -41,6 +46,9 @@ public class Button {
     }
 
     Boolean buttonHitbox(int[] mousePos) {
+        if(buttonName != focusBtn && focusBtn != ""){
+            return false;
+        }
         if (mousePos[du.x] >= position[du.x] && mousePos[du.x] <= (position[du.x] + size[du.x])
                 && mousePos[du.y] >= position[du.y] && mousePos[du.y] <= (position[du.y] + size[du.y])) {
             return true;

@@ -163,7 +163,11 @@ public class JavaNetworking extends JFrame implements Runnable {
         } else if (gh.gameState == GameHandler.GameState.Connect) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/connect.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
-
+            if(connectH.isConnecting){
+                Image cancelBtnImage = Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg");
+                g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg"), getX(ui.getButtonPosition("cancelHostBtn")[du.x]), getY(ui.getButtonPosition("cancelHostBtn")[du.y]),
+                cancelBtnImage.getWidth(this), cancelBtnImage.getHeight(this), this);
+            }
             g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
             g.setColor(Color.black);
 

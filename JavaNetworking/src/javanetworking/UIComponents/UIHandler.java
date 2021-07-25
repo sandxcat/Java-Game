@@ -10,7 +10,7 @@ public class UIHandler {
     private static GameHandler gh;
     public static ConnectionHandler connectH;
     public String host = "Enter Host IP Address Here";
-    private static ArrayList<Button> buttons = new ArrayList<Button>();
+    private ArrayList<Button> buttons = new ArrayList<Button>();
 
     public UIHandler(GameHandler _gh, ConnectionHandler ch) {
         gh = _gh;
@@ -31,10 +31,12 @@ public class UIHandler {
         Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 677, 560, GameHandler.GameState.Connect);
         Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 677, 810, GameHandler.GameState.Connect);
         Button menuBtn = new Button("menuBtn", Button.BtnType.Small, 887, 992, GameHandler.GameState.Connect);
+        Button cancelHostBtn = new Button("cancelHostBtn", Button.BtnType.Small, 1250, 810, GameHandler.GameState.Connect);
         buttons.add(ipTextBtn);
         buttons.add(hostBtn);
         buttons.add(connectBtn);
         buttons.add(menuBtn);
+        buttons.add(cancelHostBtn);
     }
 
     public void isButton(int[] mPos) {
@@ -73,6 +75,9 @@ public class UIHandler {
                 case "menuBtn":
                     gh.gameState = GameHandler.GameState.Menu;
                     break;
+                case "cancelHostBtn":
+                    Button.setFocus("cancelHostBtn");
+                    break;
             }
 
         } else if (gh.gameState == GameHandler.GameState.Pause) {
@@ -86,5 +91,14 @@ public class UIHandler {
         returnPos[du.x] = position[du.x] - dimensions[du.x] / 2;
         returnPos[du.y] = position[du.y] - dimensions[du.y] / 2;
         return returnPos;
+    }
+
+    public int[] getButtonPosition(String s){
+        for(var btn : buttons){
+            if(btn.buttonName == s){
+                return btn.position;
+            }
+        }
+        return null;
     }
 }
