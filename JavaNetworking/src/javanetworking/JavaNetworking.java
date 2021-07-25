@@ -157,7 +157,6 @@ public class JavaNetworking extends JFrame implements Runnable {
         // far outer border
         g.setColor(Color.black);
         g.fillRect(0, 0, xysize[0], xysize[1]);
-
         if (gh.gameState == GameHandler.GameState.Menu) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/menu.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
