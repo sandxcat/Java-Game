@@ -28,8 +28,8 @@ public class UIHandler {
         buttons.add(exitBtn);
         // Connect buttons
         Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 225, 280, GameHandler.GameState.Connect);
-        Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 225, 443, GameHandler.GameState.Connect);
-        Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 225, 610, GameHandler.GameState.Connect);
+        Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 225, 443, GameHandler.GameState.Connect);
+        Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 225, 610, GameHandler.GameState.Connect);
         buttons.add(ipTextBtn);
         buttons.add(hostBtn);
         buttons.add(connectBtn);
