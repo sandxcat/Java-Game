@@ -8,7 +8,7 @@ import java.awt.*;
 import java.net.*;
 import java.io.*;
 
-public class ServerHandler {
+public class ServerHandler implements Runnable {
     public static GameHandler gh;
 
     public static boolean connected = false;
@@ -18,28 +18,23 @@ public class ServerHandler {
     private static PrintWriter pw;
     private static BufferedReader br;
 
+    @Override
+    public void run() {
+
+    }
+
     public ServerHandler(GameHandler _gh) {
         gh = _gh;
     }
 
     public static void recieveConnect(int port) throws UnknownHostException, IOException, SocketTimeoutException {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    MyServer = new ServerSocket(port);
-                    clientSocket = MyServer.accept();
-                    os = clientSocket.getOutputStream();
-                    pw = new PrintWriter(os, true);
-                    br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                connected = true;
-                recievePieceMove();
-            }
-        }).start();
+        MyServer = new ServerSocket(port);
+        clientSocket = MyServer.accept();
+        os = clientSocket.getOutputStream();
+        pw = new PrintWriter(os, true);
+        br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        connected = true;
+        recievePieceMove();
     }
 
     public static void disconnect() {

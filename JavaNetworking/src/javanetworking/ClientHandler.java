@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ClientHandler {
+public class ClientHandler implements Runnable {
 	public static GameHandler gh;
 
 	public static boolean connected = false;
@@ -22,29 +22,24 @@ public class ClientHandler {
 	private static String hostIP = null;
 	private static int hostPort = -1;
 
+	@Override
+	public void run() {
+
+	}
+
 	public ClientHandler(GameHandler _gh) {
 		gh = _gh;
 	}
 
 	public static void connect(String ip, int port) throws UnknownHostException, IOException {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				hostIP = ip;
-				hostPort = port;
-				try {
-					MyClient = new Socket(ip, port);
-					br = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
-					out = new PrintWriter(MyClient.getOutputStream(), true);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		hostIP = ip;
+		hostPort = port;
+		MyClient = new Socket(ip, port);
+		br = new BufferedReader(new InputStreamReader(MyClient.getInputStream()));
+		out = new PrintWriter(MyClient.getOutputStream(), true);
+		connected = true;
+		recievePieceMove();
 
-				connected = true;
-				recievePieceMove();
-			}
-		}).start();
 	}
 
 	public static void disconnect() {
