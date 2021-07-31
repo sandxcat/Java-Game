@@ -24,9 +24,9 @@ public class JavaNetworking extends JFrame implements Runnable {
     public static Image image = null;
 
     public static GameHandler gh = new GameHandler();
-    public static ConnectionHandler connectH = new ConnectionHandler(gh);
-    public static UIHandler ui = new UIHandler(gh, connectH);
+    public static UIHandler ui = new UIHandler(gh);
     public static Graphics2D g;
+
 
     Thread relaxer;
 
@@ -110,21 +110,6 @@ public class JavaNetworking extends JFrame implements Runnable {
                     }
                 }
 
-                if (gh.gameState == GameHandler.GameState.Game || connectH.isConnecting) {
-                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE && !connectH.isConnecting) {
-
-                        if (connectH.isClient) {
-                            ClientHandler.sendDisconnect();
-                            ClientHandler.disconnect();
-                        } else {
-                            ServerHandler.sendDisconnect();
-                            ServerHandler.disconnect();
-                        }
-                        gh.gameState = GameHandler.GameState.Menu;
-                        reset();
-                    }
-                }
-
                 repaint();
             }
         });
@@ -163,11 +148,17 @@ public class JavaNetworking extends JFrame implements Runnable {
         } else if (gh.gameState == GameHandler.GameState.Connect) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/connect.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
-            if(connectH.isConnecting){
+            if(Server.isHosting){
                 Image cancelBtnImage = Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg");
                 g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg"), getX(ui.getButtonPosition("cancelHostBtn")[du.x]), getY(ui.getButtonPosition("cancelHostBtn")[du.y]),
                 cancelBtnImage.getWidth(this), cancelBtnImage.getHeight(this), this);
             }
+            else if(Client.isSearching){
+                Image clientConnectCtnDwnBtnImage = Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg");
+                g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg"), getX(ui.getButtonPosition("clientConnectCtnDwnBtn")[du.x]), getY(ui.getButtonPosition("clientConnectCtnDwnBtn")[du.y]),
+                clientConnectCtnDwnBtnImage.getWidth(this), clientConnectCtnDwnBtnImage.getHeight(this), this);
+            }
+
             g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
             g.setColor(Color.black);
 

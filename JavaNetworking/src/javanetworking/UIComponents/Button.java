@@ -9,8 +9,10 @@ public class Button {
         Main, Small
     }
     private static String focusBtn = "";
-    public String buttonName;
-    public BtnType buttonType;
+    public String name;
+    public String text;
+    public int[] textPos = new int[2];
+    public BtnType type;
     public int[] position = new int[2];
     public int[] size = new int[2];
     public GameState uiState;
@@ -32,13 +34,14 @@ public class Button {
         focusBtn = s;
     } 
 
-    Button(String _buttonName, BtnType _buttonType, int xPos, int yPos, GameState _uiState) {
-        buttonName = _buttonName;
-        buttonType = _buttonType;
+    Button(String _buttonName, BtnType _buttonType, int xPos, int yPos, GameState _uiState,String _buttonText) {
+        name = _buttonName;
+        type = _buttonType;
+        text = _buttonText;
         position = new int[] { xPos, yPos };
-        if (buttonType == BtnType.Main)
+        if (type == BtnType.Main)
             size = mainBtn();
-        else if (buttonType == BtnType.Small)
+        else if (type == BtnType.Small)
             size = smallBtn();
 
         uiState = _uiState;
@@ -46,7 +49,7 @@ public class Button {
     }
 
     Boolean buttonHitbox(int[] mousePos) {
-        if(buttonName != focusBtn && focusBtn != ""){
+        if(name != focusBtn && focusBtn != ""){
             return false;
         }
         if (mousePos[du.x] >= position[du.x] && mousePos[du.x] <= (position[du.x] + size[du.x])

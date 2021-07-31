@@ -1,51 +1,50 @@
 package javanetworking.UIComponents;
 
+import java.io.IOException;
 import java.util.ArrayList;
-
-import javanetworking.ConnectionHandler;
 import javanetworking.GameHandler;
 import javanetworking.du;
+import javanetworking.Server;
+import javanetworking.Client;
 
 public class UIHandler {
     private static GameHandler gh;
-    public static ConnectionHandler connectH;
     public String host = "Enter Host IP Address Here";
     private ArrayList<Button> buttons = new ArrayList<Button>();
 
-    public UIHandler(GameHandler _gh, ConnectionHandler ch) {
+    public UIHandler(GameHandler _gh) {
         gh = _gh;
-        connectH = ch;
         generateBtns();
     }
 
     private void generateBtns() {
         // Menu buttons
-        Button startBtn = new Button("startBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Menu);
-        Button optionsBtn = new Button("optionsBtn", Button.BtnType.Main, 677, 500, GameHandler.GameState.Menu);
-        Button exitBtn = new Button("exitBtn", Button.BtnType.Main, 677, 685, GameHandler.GameState.Menu);
+        Button startBtn = new Button("startBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Menu,"");
+        Button optionsBtn = new Button("optionsBtn", Button.BtnType.Main, 677, 500, GameHandler.GameState.Menu,"");
+        Button exitBtn = new Button("exitBtn", Button.BtnType.Main, 677, 685, GameHandler.GameState.Menu,"");
         buttons.add(startBtn);
         buttons.add(optionsBtn);
         buttons.add(exitBtn);
         // Connect buttons
-        Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Connect);
-        Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 677, 560, GameHandler.GameState.Connect);
-        Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 677, 810, GameHandler.GameState.Connect);
-        Button menuBtn = new Button("menuBtn", Button.BtnType.Small, 887, 992, GameHandler.GameState.Connect);
-        Button cancelHostBtn = new Button("cancelHostBtn", Button.BtnType.Small, 1250, 810, GameHandler.GameState.Connect);
+        Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Connect,"");
+        Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 677, 560, GameHandler.GameState.Connect,"");
+        Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 677, 810, GameHandler.GameState.Connect,"");
+        Button menuBtn = new Button("menuBtn", Button.BtnType.Small, 887, 992, GameHandler.GameState.Connect,"");
+        Button cancelHostBtn = new Button("cancelHostBtn", Button.BtnType.Small, 1250, 810, GameHandler.GameState.Connect,"");
+        Button clientConnectCntDwnBtn = new Button("clientConnectCntDwnBtn", Button.BtnType.Main, 1920/2, 1080/2, GameHandler.GameState.Connect,"");
         buttons.add(ipTextBtn);
         buttons.add(hostBtn);
         buttons.add(connectBtn);
         buttons.add(menuBtn);
         buttons.add(cancelHostBtn);
+        buttons.add(clientConnectCntDwnBtn);
     }
 
     public void isButton(int[] mPos) {
         String hitButtonName = "";
         for (Button btnObj : buttons) {
-            if (btnObj.uiState == gh.gameState) {
-                if (btnObj.buttonHitbox(mPos))
-                    hitButtonName = btnObj.buttonName;
-            }
+            if (btnObj.uiState == gh.gameState && btnObj.buttonHitbox(mPos)) 
+                    hitButtonName = btnObj.name;
         }
 
         if (gh.gameState == GameHandler.GameState.Menu) {
@@ -67,16 +66,22 @@ public class UIHandler {
                     host = "";
                     break;
                 case "hostBtn":
-                    connectH.connect("Host", host);
+                    Server.serverThread = new Server();
+                    Server.serverThread.start();
+                    Button.setFocus("cancelHostBtn");
                     break;
                 case "connectBtn":
-                    connectH.connect("Connect", host);
+                    Client.clientThread = new Client();
+                    Client.clientThread.start();
                     break;
                 case "menuBtn":
                     gh.gameState = GameHandler.GameState.Menu;
                     break;
                 case "cancelHostBtn":
-                    Button.setFocus("cancelHostBtn");
+                    Button.setFocus("");
+                    //Server.serverThread.stop();
+                    Server.stopServer();
+                    Server.isHosting = false;
                     break;
             }
 
@@ -95,7 +100,7 @@ public class UIHandler {
 
     public int[] getButtonPosition(String s){
         for(var btn : buttons){
-            if(btn.buttonName == s){
+            if(btn.name == s){
                 return btn.position;
             }
         }
