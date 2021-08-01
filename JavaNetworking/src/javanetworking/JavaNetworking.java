@@ -1,19 +1,12 @@
 
 package javanetworking;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import javanetworking.UIComponents.UIHandler;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-
-import java.net.*;
-import java.io.*;
-import java.awt.image.*;
 
 public class JavaNetworking extends JFrame implements Runnable {
     public static final int WINDOW_BORDER[] = new int[] { 0, 0 };
@@ -24,8 +17,8 @@ public class JavaNetworking extends JFrame implements Runnable {
     public static Image image = null;
 
     public static GameHandler gh = new GameHandler();
-    public static UIHandler ui = new UIHandler(gh);
     public static Graphics2D g;
+    public static UIHandler ui = new UIHandler(gh);
 
 
     Thread relaxer;
@@ -82,31 +75,31 @@ public class JavaNetworking extends JFrame implements Runnable {
 
             public void keyPressed(KeyEvent e) {
 
-                if (gh.gameState == GameHandler.GameState.Connect && (ui.host.length() < 15 || e.getKeyCode() == 8)) {
+                if (gh.gameState == GameHandler.GameState.Connect && (ui.getButton("ipTextBtn").text.length() < 15 || e.getKeyCode() == 8)) {
                     if (e.getKeyCode() == KeyEvent.VK_0 || e.getKeyCode() == KeyEvent.VK_NUMPAD0) {
-                        ui.host += "0";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "0"));
                     } else if (e.getKeyCode() == KeyEvent.VK_1 || e.getKeyCode() == KeyEvent.VK_NUMPAD1) {
-                        ui.host += "1";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "1"));
                     } else if (e.getKeyCode() == KeyEvent.VK_2 || e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
-                        ui.host += "2";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "2"));
                     } else if (e.getKeyCode() == KeyEvent.VK_3 || e.getKeyCode() == KeyEvent.VK_NUMPAD3) {
-                        ui.host += "3";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "3"));
                     } else if (e.getKeyCode() == KeyEvent.VK_4 || e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
-                        ui.host += "4";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "4"));
                     } else if (e.getKeyCode() == KeyEvent.VK_5 || e.getKeyCode() == KeyEvent.VK_NUMPAD5) {
-                        ui.host += "5";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "5"));
                     } else if (e.getKeyCode() == KeyEvent.VK_6 || e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
-                        ui.host += "6";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "6"));
                     } else if (e.getKeyCode() == KeyEvent.VK_7 || e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
-                        ui.host += "7";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "7"));
                     } else if (e.getKeyCode() == KeyEvent.VK_8 || e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
-                        ui.host += "8";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "8"));
                     } else if (e.getKeyCode() == KeyEvent.VK_9 || e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
-                        ui.host += "9";
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "9"));
                     } else if (e.getKeyCode() == KeyEvent.VK_PERIOD) {
-                        ui.host += ".";
-                    } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && ui.host.length() > 0) {
-                        ui.host = ui.host.substring(0, ui.host.length() - 1);
+                        ui.getButton("ipTextBtn").setText((ui.getButton("ipTextBtn").text += "."));
+                    } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && ui.getButton("ipTextBtn").text.length() > 0) {
+                        ui.getButton("ipTextBtn").setText(ui.getButton("ipTextBtn").text.substring(0, ui.getButton("ipTextBtn").text.length() - 1));
                     }
                 }
 
@@ -126,8 +119,9 @@ public class JavaNetworking extends JFrame implements Runnable {
             xysize[0] = getSize().width;
             xysize[1] = getSize().height;
             image = createImage(xysize[0], xysize[1]);
-            g = (Graphics2D) image.getGraphics();
+            g = (Graphics2D) image.getGraphics();         
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            ui.generateBtns();
         }
 
         if (animateFirstTime) {
@@ -135,13 +129,13 @@ public class JavaNetworking extends JFrame implements Runnable {
             return;
         }
 
-        int x[] = { getX(0), getX(getWidth2()), getX(getWidth2()), getX(0), getX(0) };
-        int y[] = { getY(0), getY(0), getY(getHeight2()), getY(getHeight2()), getY(0) };
+
         // put all paint commands under this line
 
         // far outer border
         g.setColor(Color.black);
         g.fillRect(0, 0, xysize[0], xysize[1]);
+
         if (gh.gameState == GameHandler.GameState.Menu) {
             g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/menu.jpg"), getX(0), getY(0),
                     getWidth2(), getHeight2(), this);
@@ -154,7 +148,7 @@ public class JavaNetworking extends JFrame implements Runnable {
                 cancelBtnImage.getWidth(this), cancelBtnImage.getHeight(this), this);
             }
             else if(Client.isSearching){
-                Image clientConnectCtnDwnBtnImage = Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg");
+                Image clientConnectCtnDwnBtnImage = Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/blankBtn.jpg");
                 g.drawImage(Toolkit.getDefaultToolkit().getImage("./JavaNetworking/assets/cancelBtn.jpg"), getX(ui.getButtonPosition("clientConnectCtnDwnBtn")[du.x]), getY(ui.getButtonPosition("clientConnectCtnDwnBtn")[du.y]),
                 clientConnectCtnDwnBtnImage.getWidth(this), clientConnectCtnDwnBtnImage.getHeight(this), this);
             }
@@ -162,11 +156,12 @@ public class JavaNetworking extends JFrame implements Runnable {
             g.setFont(new Font("Comic Sans", Font.ROMAN_BASELINE, 20));
             g.setColor(Color.black);
 
+            /*
             Rectangle2D stringBounds = g.getFontMetrics().getStringBounds(ui.host, g);
-            int[] drawPos = UIHandler.centerText(new int[] { 960, 355 },
-                    new int[] { (int) stringBounds.getWidth(), (int) stringBounds.getHeight() });
+            int[] drawPos = UIHandler.centerText(new int[] { 960, 355 },new int[] { (int) stringBounds.getWidth(), (int) stringBounds.getHeight() });
             g.drawString(ui.host, getX(drawPos[du.x]), getY(drawPos[du.y]));
-
+            */
+            g.drawString(ui.getButton("ipTextBtn").text, getX(ui.getButton("ipTextBtn").textPos[du.x]),getY(ui.getButton("ipTextBtn").textPos[du.y]));
         }
 
         // put all paint commands above this line
@@ -216,7 +211,7 @@ public class JavaNetworking extends JFrame implements Runnable {
                 xysize[0] = getSize().width;
                 xysize[1] = getSize().height;
             }
-
+            
             reset();
         }
     }
@@ -232,7 +227,7 @@ public class JavaNetworking extends JFrame implements Runnable {
     // //////////////////////////////////////////////////////////////////////////
     public void stop() {
         if (relaxer.isAlive()) {
-            relaxer.stop();
+            relaxer.interrupt();
         }
         relaxer = null;
     }

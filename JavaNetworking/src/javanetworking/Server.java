@@ -4,8 +4,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class Server extends Thread {
 	public static Thread serverThread;
@@ -19,7 +17,6 @@ public class Server extends Thread {
         try {
             serverSocket = new ServerSocket(2345);
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
 		System.out.println("ServerSocket: " + serverSocket);
@@ -34,7 +31,7 @@ public class Server extends Thread {
 				}
 				else{
 					socket.close();
-                    serverThread.stop();
+                    serverThread.interrupt();
 					//break;
 				}
 				
@@ -52,7 +49,6 @@ public class Server extends Thread {
 				try {
                     socket.close();
                 } catch (IOException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
 			}

@@ -1,6 +1,4 @@
 package javanetworking.UIComponents;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import javanetworking.GameHandler;
 import javanetworking.du;
@@ -9,15 +7,15 @@ import javanetworking.Client;
 
 public class UIHandler {
     private static GameHandler gh;
-    public String host = "Enter Host IP Address Here";
     private ArrayList<Button> buttons = new ArrayList<Button>();
 
     public UIHandler(GameHandler _gh) {
         gh = _gh;
-        generateBtns();
+        
     }
 
-    private void generateBtns() {
+    public void generateBtns() {
+        
         // Menu buttons
         Button startBtn = new Button("startBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Menu,"");
         Button optionsBtn = new Button("optionsBtn", Button.BtnType.Main, 677, 500, GameHandler.GameState.Menu,"");
@@ -26,7 +24,7 @@ public class UIHandler {
         buttons.add(optionsBtn);
         buttons.add(exitBtn);
         // Connect buttons
-        Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Connect,"");
+        Button ipTextBtn = new Button("ipTextBtn", Button.BtnType.Main, 677, 315, GameHandler.GameState.Connect,"Enter Host IP");
         Button connectBtn = new Button("connectBtn", Button.BtnType.Main, 677, 560, GameHandler.GameState.Connect,"");
         Button hostBtn = new Button("hostBtn", Button.BtnType.Main, 677, 810, GameHandler.GameState.Connect,"");
         Button menuBtn = new Button("menuBtn", Button.BtnType.Small, 887, 992, GameHandler.GameState.Connect,"");
@@ -63,7 +61,7 @@ public class UIHandler {
 
             switch (hitButtonName) {
                 case "ipTextBtn":
-                    host = "";
+                    getButton("ipTextBtn").setText("");
                     break;
                 case "hostBtn":
                     Server.serverThread = new Server();
@@ -103,6 +101,14 @@ public class UIHandler {
             if(btn.name == s){
                 return btn.position;
             }
+        }
+        return null;
+    }
+
+    public Button getButton(String s){
+        for(var btn : buttons){
+            if(btn.name == s)
+                return btn;
         }
         return null;
     }
